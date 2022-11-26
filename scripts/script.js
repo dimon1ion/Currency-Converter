@@ -125,10 +125,5 @@ async function changeInput(status) {
         case Status.TO:
             inputFrom.value = currency.amountToFrom(inputTo.value);
             break;
-        // case Status.BOTH:
-        //     let tmp = inputFrom.value;
-        //     inputFrom.value = inputTo.value;
-        //     inputTo.value = tmp;
-        //     break;
     }
 }
