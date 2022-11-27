@@ -17,12 +17,10 @@ const inputToRate = document.querySelector("#inputToRate");
 let currencyFromActive = document.querySelector(".converter__from .button-currency.active") ?? null;
 let currencyToActive = document.querySelector(".converter__to .button-currency.active") ?? null;
 
-let changeRateView = () => {
-    inputFromRate.textContent = `1 ${currency.from} = ${currency.rateFromTo} ${currency.to}`;
-    inputToRate.textContent = `1 ${currency.to} = ${currency.rateToFrom} ${currency.from}`;
-}
-
-const currency = new Currency(currencyFromActive.textContent, currencyToActive.textContent, changeRateView);
+const currency = new Currency(currencyFromActive.textContent, currencyToActive.textContent, () =>{ 
+    changeRateView();
+    changeInput(Status.FROM);
+});
 
 //#endregion
 
@@ -69,7 +67,6 @@ async function changeInputsCheckReverse(newContent, status) {
         case Status.FROM:
             if (currencyToActive.textContent !== newContent) {
                 await currency.setFrom(newContent);
-                changeInput(Status.FROM);
                 return;
             }
             oldContent = currencyFromActive.textContent;
@@ -78,7 +75,6 @@ async function changeInputsCheckReverse(newContent, status) {
         case Status.TO:
             if (currencyFromActive.textContent !== newContent) {
                 await currency.setTo(newContent);
-                changeInput(Status.FROM);
                 return;
             }
             oldContent = currencyToActive.textContent;
@@ -102,7 +98,6 @@ async function changeInputsCheckReverse(newContent, status) {
                     break;
             }
             currency.reverse();
-            await changeInput(Status.FROM);
             return;
         }
     }
@@ -117,7 +112,7 @@ function checkInput(event) {
     }
 }
 
-async function changeInput(status) {
+function changeInput(status) {
     switch (status) {
         case Status.FROM:
             inputTo.value = currency.amountFromTo(inputFrom.value);
@@ -126,4 +121,9 @@ async function changeInput(status) {
             inputFrom.value = currency.amountToFrom(inputTo.value);
             break;
     }
+}
+
+function changeRateView (){
+    inputFromRate.textContent = `1 ${currency.from} = ${currency.rateFromTo} ${currency.to}`;
+    inputToRate.textContent = `1 ${currency.to} = ${currency.rateToFrom} ${currency.from}`;
 }
