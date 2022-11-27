@@ -66,6 +66,7 @@ export default class Currency{
     async #setRateFromServer(){
         let data = await (await fetch(`https://api.exchangerate.host/convert?from=${this.#_from}&to=${this.#_to}`)).json();
         if (data.success !== true) {
+            alert("Error");
             throw "Not work";
         }
         this.#_rate = data.info.rate;
